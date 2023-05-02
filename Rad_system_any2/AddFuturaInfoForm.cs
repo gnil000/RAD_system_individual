@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,54 +9,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Npgsql;
-
 
 namespace Rad_system_any2
 {
-    public partial class DataGoodsForm : Form
+    public partial class AddFuturaInfoForm : Form
     {
+
         NpgsqlConnection con;
 
-        public DataGoodsForm(NpgsqlConnection con)
+        public AddFuturaInfoForm(NpgsqlConnection con)
         {
             InitializeComponent();
             this.con = con;
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             try
             {
                 //NpgsqlCommand cmd = new NpgsqlCommand($"insert into Product values(default, {textBox1.Text}, {textBox2.Text})", con);
-                NpgsqlCommand cmd = new NpgsqlCommand($"insert into Product(id_product, name_product, ed_product) values(default, :name_product , :ed_product )", con);
+                NpgsqlCommand cmd = new NpgsqlCommand($"insert into FuturaInfo(id_fut_info, id_futura, id_product, quantity, price) values(default, :id_futura, :id_product, :quantity, :price)", con);
 
 
-                cmd.Parameters.AddWithValue("name_product", textBox1.Text);
-                cmd.Parameters.AddWithValue("ed_product", textBox2.Text);
+                cmd.Parameters.AddWithValue("id_futura", Convert.ToInt64(textBox1.Text));
+                cmd.Parameters.AddWithValue("id_product", Convert.ToInt64(textBox2.Text));
+                cmd.Parameters.AddWithValue("quantity", Convert.ToInt64(textBox3.Text));
+                cmd.Parameters.AddWithValue("price", Convert.ToInt64(textBox4.Text));
 
                 cmd.ExecuteNonQuery();
                 Close();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine("Any exception");
             }
 
-        }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Close();
         }
     }
 }

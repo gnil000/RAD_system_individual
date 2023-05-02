@@ -88,11 +88,13 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "отмена";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // DataGoodsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.LavenderBlush;
             this.ClientSize = new System.Drawing.Size(467, 349);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);

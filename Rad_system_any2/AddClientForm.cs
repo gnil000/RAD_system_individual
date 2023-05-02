@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,22 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Npgsql;
-
 
 namespace Rad_system_any2
 {
-    public partial class DataGoodsForm : Form
+    public partial class AddClientForm : Form
     {
+
         NpgsqlConnection con;
 
-        public DataGoodsForm(NpgsqlConnection con)
+        public AddClientForm(NpgsqlConnection con)
         {
             InitializeComponent();
-            this.con = con;
+            this.con = con; 
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void AddClientForm_Load(object sender, EventArgs e)
         {
 
         }
@@ -33,29 +33,24 @@ namespace Rad_system_any2
             try
             {
                 //NpgsqlCommand cmd = new NpgsqlCommand($"insert into Product values(default, {textBox1.Text}, {textBox2.Text})", con);
-                NpgsqlCommand cmd = new NpgsqlCommand($"insert into Product(id_product, name_product, ed_product) values(default, :name_product , :ed_product )", con);
+                NpgsqlCommand cmd = new NpgsqlCommand($"insert into Client(id_client, name_client, adress, phone) values(default, :name_client , :adress , :phone )", con);
 
 
-                cmd.Parameters.AddWithValue("name_product", textBox1.Text);
-                cmd.Parameters.AddWithValue("ed_product", textBox2.Text);
+                cmd.Parameters.AddWithValue("name_client", textBox1.Text);
+                cmd.Parameters.AddWithValue("adress", textBox2.Text);
+                cmd.Parameters.AddWithValue("phone", textBox3.Text);
+
 
                 cmd.ExecuteNonQuery();
                 Close();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine("Any exception");
             }
 
-        }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Close();
         }
     }
 }
