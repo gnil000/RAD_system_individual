@@ -29,7 +29,7 @@ namespace Rad_system_any2
             dataGridView1.Columns[1].HeaderText = "Код накладной";
             dataGridView1.Columns[2].HeaderText = "Код продукта";
             dataGridView1.Columns[3].HeaderText = "Количество";
-            dataGridView1.Columns[3].HeaderText = "Сумма";
+            dataGridView1.Columns[4].HeaderText = "Сумма";
 
         }
 
