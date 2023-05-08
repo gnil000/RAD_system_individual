@@ -16,11 +16,13 @@ namespace Rad_system_any2
     {
 
         NpgsqlConnection con;
+        int id;
 
-        public AddFuturaInfoForm(NpgsqlConnection con)
+        public AddFuturaInfoForm(NpgsqlConnection con, int id)
         {
             InitializeComponent();
             this.con = con;
+            this.id = id;
         }
 
 
@@ -34,7 +36,7 @@ namespace Rad_system_any2
                 NpgsqlCommand cmd = new NpgsqlCommand($"insert into FuturaInfo(id_fut_info, id_futura, id_product, quantity, price) values(default, :id_futura, :id_product, :quantity, :price)", con);
 
 
-                cmd.Parameters.AddWithValue("id_futura", Convert.ToInt64(textBox1.Text));
+                cmd.Parameters.AddWithValue("id_futura", id);
                 cmd.Parameters.AddWithValue("id_product", Convert.ToInt64(textBox2.Text));
                 cmd.Parameters.AddWithValue("quantity", Convert.ToInt64(textBox3.Text));
                 cmd.Parameters.AddWithValue("price", Convert.ToInt64(textBox4.Text));

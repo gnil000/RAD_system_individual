@@ -35,12 +35,12 @@ namespace Rad_system_any2
         {
             try
             {
-                NpgsqlCommand cmd = new NpgsqlCommand($"insert into futura(id_futura, data_fut, id_client, total_sum) values(default, :data_fut , :id_client , :total_sum)", con);
+                NpgsqlCommand cmd = new NpgsqlCommand($"insert into futura(id_futura, data_fut, id_client, predoplata) values(default, :data_fut , :id_client , :predoplata)", con);
 
                 var dat = DateTime.Now;
                 cmd.Parameters.AddWithValue("data_fut", dat);
                 cmd.Parameters.AddWithValue("id_client", Convert.ToInt64(textBox2.Text));
-                cmd.Parameters.AddWithValue("total_sum", Convert.ToInt64(textBox3.Text));
+                cmd.Parameters.AddWithValue("predoplata", checkBox1.Checked);
 
                 cmd.ExecuteNonQuery();
                 Close();

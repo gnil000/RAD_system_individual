@@ -1,0 +1,82 @@
+create table Product(
+	id_product serial primary key,
+	name_product varchar(50) not null,
+	ed_product varchar(20) not null
+);
+
+create table Client(
+	id_client serial primary key,
+	name_client varchar(100) not null,
+	adress varchar(100),
+	phone varchar(12)
+);
+
+create table Futura(
+	id_futura serial primary key,
+	data_fut date,
+	id_client serial references Client(id_client),
+	total_sum real
+);
+
+create table FuturaInfo(
+	id_fut_info serial primary key,
+	id_futura serial references Futura(id_futura),
+	id_product serial references Product(id_product),
+	quantity real,
+	price real
+);
+
+drop trigger Futura on futuraInfo
+
+CREATE OR REPLACE FUNCTION process_price_change() RETURNS TRIGGER AS $Futura$
+    BEGIN
+        --
+        -- Добавление строки в emp_audit, которая отражает операцию, выполняемую в emp;
+        -- для определения типа операции применяется специальная переменная TG_OP.
+        --
+        IF (TG_OP = 'DELETE') THEN
+            Update Futura set total_sum=total_sum-1;
+            RETURN OLD;
+        ELSIF (TG_OP = 'INSERT') THEN
+            Update Futura set total_sum=total_sum+1;
+            RETURN NEW;
+        END IF;
+        RETURN NULL; -- возвращаемое значение для триггера AFTER игнорируется
+    END;
+$Futura$ LANGUAGE plpgsql;
+
+CREATE TRIGGER Futura
+AFTER INSERT OR DELETE ON FuturaInfo
+    FOR EACH ROW EXECUTE PROCEDURE process_price_change();
+
+
+select * from client
+select * from product
+select * from futura
+select * from futuraInfo
+
+drop table client
+
+insert into Product values(default, 'Snikers', 'граммы')
+insert into Client(id_client, name_client, adress, phone) values(default, 'Бабаров Бабар Бабарович', 'Улица Пушкина дом Колотушкина', '+79187777777')
+insert into Futura(id_futura, id_client, total_sum) values(default, 1, 219) 
+insert into FuturaInfo values(default, 1, 1, 24, 41)
+
+
+
+
+
+
+select * from futurainfo where (futurainfo.id_futura in (select futura.id_futura from futura where futura.id_client = '4')) and (futurainfo.id_futura in (select futura.id_futura from futura where futura.data_fut = '30.4.2023'))
+
+
+
+select product.name_product, quantity, price from futurainfo inner join product on futurainfo.id_product = product.id_product where (futurainfo.id_futura in (select futura.id_futura from futura where futura.id_client = '4')) and (futurainfo.id_futura in (select futura.id_futura from futura where futura.data_fut = '30.4.2023')) 
+
+
+
+select product.name_product, quantity, price 
+from futurainfo 
+inner join product on futurainfo.id_product = product.id_product
+where (futurainfo.id_futura in (select futura.id_futura from futura where futura.id_client in (4))) and (futurainfo.id_futura in (select futura.id_futura from futura where futura.data_fut between '01.02.2023' and '30.05.2023'))
+

@@ -65,9 +65,9 @@ namespace Rad_system_any2
 
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddFuturaInfoForm f1 = new AddFuturaInfoForm(npgsqlConnection);
-            f1.ShowDialog();
-            ConnectToDataBase();
+            //AddFuturaInfoForm f1 = new AddFuturaInfoForm(npgsqlConnection);
+            //f1.ShowDialog();
+            //ConnectToDataBase();
         }
 
         private void редактироватьToolStripMenuItem_Click(object sender, EventArgs e)

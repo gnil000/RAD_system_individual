@@ -13,8 +13,8 @@ namespace Rad_system_any2
 {
     public partial class FuturaForm : Form
     {
-        DataSet ds;
-        DataTable dt;
+        DataSet ds, ds2;
+        DataTable dt, dt2;
         NpgsqlConnection npgsqlConnection;
 
 
@@ -30,7 +30,15 @@ namespace Rad_system_any2
             dataGridView1.Columns[1].HeaderText = "Дата создания";
             dataGridView1.Columns[2].HeaderText = "ФИО клиента";
             dataGridView1.Columns[3].HeaderText = "Сумма";
+            dataGridView1.Columns[4].HeaderText = "Предоплата";
 
+
+            WatchFuturaInfo();
+            dataGridView2.Columns[0].HeaderText = "Код отчёта";
+            dataGridView2.Columns[1].HeaderText = "Код накладной";
+            dataGridView2.Columns[2].HeaderText = "Код продукта";
+            dataGridView2.Columns[3].HeaderText = "Количество";
+            dataGridView2.Columns[3].HeaderText = "Сумма";
         }
 
         private void FuturaForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -44,7 +52,9 @@ namespace Rad_system_any2
         {
             ds = new DataSet();
             dt = new DataTable();
-            string sql = "select * from futura";
+            //string sql = "select * from futura";
+
+            string sql = "select id_futura, data_fut, client.name_client, total_sum, predoplata from futura inner join client on futura.id_client = client.id_client";
 
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(sql, npgsqlConnection);
 
@@ -52,6 +62,36 @@ namespace Rad_system_any2
             dataAdapter.Fill(ds);
             dt = ds.Tables[0];
             dataGridView1.DataSource = dt;
+        }
+
+        void WatchFuturaInfo() { 
+            ds2 = new DataSet();
+            dt2 = new DataTable();
+            string sql = "select * from futurainfo";
+
+            NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(sql, npgsqlConnection);
+
+            ds2.Reset();
+            dataAdapter.Fill(ds2);
+            dt2 = ds2.Tables[0];
+            dataGridView2.DataSource = dt2;
+
+        }
+
+
+        private void PickFuturaInfo(object sender, EventArgs e) {
+            int id = (int)dataGridView1.CurrentRow.Cells["id_futura"].Value;
+
+
+            string sql = $"select * from futurainfo where id_futura = {id}";
+
+            NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(sql, npgsqlConnection);
+
+            ds2.Reset();
+            dataAdapter.Fill(ds2);
+            dt2 = ds2.Tables[0];
+            dataGridView2.DataSource = dt2;
+
         }
 
 
@@ -66,7 +106,16 @@ namespace Rad_system_any2
 
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //int id = (int)dataGridView1.CurrentRow.Cells["id_futura"].Value;
             AddFuturaForm f1 = new AddFuturaForm(npgsqlConnection);
+            f1.ShowDialog();
+            ConnectToDataBase();
+        }
+
+        private void добавитьВоВторуюТаблицуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int id = (int)dataGridView1.CurrentRow.Cells["id_futura"].Value;
+            AddFuturaInfoForm f1 = new AddFuturaInfoForm(npgsqlConnection, id);
             f1.ShowDialog();
             ConnectToDataBase();
         }

@@ -131,7 +131,7 @@ namespace Rad_system_any2
 
             sqlAdd = String.Join(", ", keyV);
 
-            string sql = $"select product.name_product, quantity, price from futurainfo inner join product on futurainfo.id_product = product.id_product where (futurainfo.id_futura in (select futura.id_futura from futura where futura.id_client in ({sqlAdd}))) and (futurainfo.id_futura in (select futura.id_futura from futura where futura.data_fut between '{date1}' and '{date2}'))";
+            string sql = $"select product.name_product, SUM(quantity), SUM(price) from futurainfo inner join product on futurainfo.id_product = product.id_product where (futurainfo.id_futura in (select futura.id_futura from futura where futura.id_client in ({sqlAdd}))) and (futurainfo.id_futura in (select futura.id_futura from futura where futura.data_fut between '{date1}' and '{date2}')) group by product.name_product";
 
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(sql, npgsqlConnection);
 
@@ -142,21 +142,22 @@ namespace Rad_system_any2
             ds3.Reset();
             dataAdapter.Fill(ds3);
             dt3 = ds3.Tables[0];
-
-            using (OpenFileDialog ofd = new OpenFileDialog())
+            try
             {
-                ofd.ShowDialog();
-                string filename = ofd.FileName;
-                Microsoft.Office.Interop.Excel.Application excelObject = new Microsoft.Office.Interop.Excel.Application();
-                excelObject.Visible = false;
-                Workbook wb = excelObject.Workbooks.Open(filename, 0, false, 5, "", "", false, XlPlatform.xlWindows, "", true, false, 0, true, false, false);
-                Worksheet wsh = (Worksheet)wb.Sheets[1];
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.ShowDialog();
+                    string filename = ofd.FileName;
+                    Microsoft.Office.Interop.Excel.Application excelObject = new Microsoft.Office.Interop.Excel.Application();
+                    excelObject.Visible = false;
+                    Workbook wb = excelObject.Workbooks.Open(filename, 0, false, 5, "", "", false, XlPlatform.xlWindows, "", true, false, 0, true, false, false);
+                    Worksheet wsh = (Worksheet)wb.Sheets[1];
 
-                wsh.Cells[1, 1] = "Название товара";
-                wsh.Cells[1, 2] = "Количество";
-                wsh.Cells[1, 3] = "Сумма (в рублях)";
-                wsh.Cells[1, 4] = "Период выборки для отчёта:";
-                wsh.Cells[2,4] =  $"{date1} - {date2}";
+                    wsh.Cells[1, 1] = "Название товара";
+                    wsh.Cells[1, 2] = "Количество";
+                    wsh.Cells[1, 3] = "Сумма (в рублях)";
+                    wsh.Cells[1, 4] = "Период выборки для отчёта:";
+                    wsh.Cells[2, 4] = $"{date1} - {date2}";
 
                     for (int i = 0; i < dt3.Rows.Count; i++)
                     {
@@ -165,9 +166,13 @@ namespace Rad_system_any2
                             wsh.Cells[i + 2, j + 1] = dt3.Rows[i].ItemArray[j];
 
                     }
-                excelObject.Columns.AutoFit();
-                wb.Save();
-                wb.Close();
+                    excelObject.Columns.AutoFit();
+                    wb.Save();
+                    wb.Close();
+                }
+            }
+            catch(Exception ex) { 
+                
             }
         }
     }
