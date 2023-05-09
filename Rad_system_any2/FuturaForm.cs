@@ -36,7 +36,7 @@ namespace Rad_system_any2
             WatchFuturaInfo();
             dataGridView2.Columns[0].HeaderText = "Код отчёта";
             dataGridView2.Columns[1].HeaderText = "Код накладной";
-            dataGridView2.Columns[2].HeaderText = "Код продукта";
+            dataGridView2.Columns[2].HeaderText = "Продукт";
             dataGridView2.Columns[3].HeaderText = "Количество";
             dataGridView2.Columns[3].HeaderText = "Сумма";
         }
@@ -54,7 +54,7 @@ namespace Rad_system_any2
             dt = new DataTable();
             //string sql = "select * from futura";
 
-            string sql = "select id_futura, data_fut, client.name_client, total_sum, predoplata from futura inner join client on futura.id_client = client.id_client";
+            string sql = "select id_futura, data_fut, client.name_client, total_sum, predoplata from futura inner join client on futura.id_client = client.id_client ";
 
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(sql, npgsqlConnection);
 
@@ -67,7 +67,7 @@ namespace Rad_system_any2
         void WatchFuturaInfo() { 
             ds2 = new DataSet();
             dt2 = new DataTable();
-            string sql = "select * from futurainfo";
+            string sql = "select id_fut_info, id_futura, product.name_product, quantity, price from futurainfo inner join product on futurainfo.id_product = product.id_product";
 
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(sql, npgsqlConnection);
 
@@ -83,7 +83,7 @@ namespace Rad_system_any2
             int id = (int)dataGridView1.CurrentRow.Cells["id_futura"].Value;
 
 
-            string sql = $"select * from futurainfo where id_futura = {id}";
+            string sql = $"select id_fut_info, id_futura, product.name_product, quantity, price from futurainfo inner join product on futurainfo.id_product = product.id_product where id_futura = {id}";
 
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(sql, npgsqlConnection);
 

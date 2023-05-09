@@ -14,18 +14,24 @@ create table Client(
 create table Futura(
 	id_futura serial primary key,
 	data_fut date,
-	id_client serial references Client(id_client),
+	id_client serial references Client(id_client) on DELETE CASCADE,
 	total_sum real DEFAULT 0,
 	predoplata bool
 );
 
 create table FuturaInfo(
 	id_fut_info serial primary key,
-	id_futura serial references Futura(id_futura),
-	id_product serial references Product(id_product),
+	id_futura serial references Futura(id_futura) on DELETE CASCADE,
+	id_product serial references Product(id_product) on DELETE CASCADE,
 	quantity real,
 	price real
 );
+
+select id_fut_info, id_futura, product.name_product, quantity, price
+from futurainfo
+inner join product on futurainfo.id_product = product.id_product
+
+
 
 drop trigger Futura on futuraInfo
 
