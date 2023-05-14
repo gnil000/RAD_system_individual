@@ -43,9 +43,19 @@ namespace Rad_system_any2
         }
 
         private void Delete(int id) {
-            NpgsqlCommand cmd = new NpgsqlCommand("delete from product where id_product = :id", npgsqlConnection);
-            cmd.Parameters.AddWithValue("id", id);
-            cmd.ExecuteNonQuery();
+            // MessageBox.Show("Точно удалить?");
+
+            DialogResult dr = MessageBox.Show("Вы уверены, что хотите удалить?", "",MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+
+                NpgsqlCommand cmd = new NpgsqlCommand("delete from product where id_product = :id", npgsqlConnection);
+                cmd.Parameters.AddWithValue("id", id);
+                cmd.ExecuteNonQuery();
+            }
+            else { 
+                
+            }
         }
 
 

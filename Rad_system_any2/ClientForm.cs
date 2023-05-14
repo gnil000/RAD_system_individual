@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace Rad_system_any2
 {
+
     public partial class ClientForm : Form
     {
-
         DataSet ds;
         DataTable dt;
         NpgsqlConnection npgsqlConnection;

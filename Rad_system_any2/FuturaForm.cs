@@ -38,7 +38,7 @@ namespace Rad_system_any2
             dataGridView2.Columns[1].HeaderText = "Код накладной";
             dataGridView2.Columns[2].HeaderText = "Продукт";
             dataGridView2.Columns[3].HeaderText = "Количество";
-            dataGridView2.Columns[3].HeaderText = "Сумма";
+            dataGridView2.Columns[4].HeaderText = "Сумма";
         }
 
         private void FuturaForm_FormClosed(object sender, FormClosedEventArgs e)
